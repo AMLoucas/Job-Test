@@ -43,7 +43,13 @@ def convert_full_frame(full_frame, new_sub_frame, mapped_column):
     return df
 
 
+def find_rating_sum(data_frame):
+    #
+    data_frame = data_frame.drop('timestamp', axis=1)
+    # Finding unique paris and finding the rating sum.
+    new_df = data_frame.groupby(['userIdAsInteger', 'itemIdAsInteger'])['rating'].sum().reset_index()
 
+    return new_df
 
 
 """
@@ -73,4 +79,4 @@ if __name__ == '__main__':
 
     print(agg.info())
 
-
+    print(find_rating_sum(agg))
