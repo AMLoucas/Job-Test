@@ -4,13 +4,27 @@ Importing libraries and packages that will be used in the program.
 """
 import pandas
 
+'''
+Method that reads the CSV file and applies headers to columns.
+filename = variable with the full filepath of the file.
+'''
 
-# Method that reads a csv file and returns it to the main.
+
 def read_csv_file(filename):
     df = pandas.read_csv(filename,
-                         names=['userId', 'itemId', 'rating', 'timestamp'],
-                         nrows=5000)
+                         names=['userId', 'itemId', 'rating', 'timestamp'])
     return df
+
+
+'''
+Method that drops all the extra dupllicate ID's (customer, item) and then converts the String ID's to
+unique integer identifiers starting from 0 and having a correct sequence.
+Works for User's and Item's
+csv_file = the dataframe that was created from the CSV reader method.
+sorting_value = the column we want to sort the dataframe.
+drop_col = the columns we do not want to include in new dataframe.
+new_col = the new column name we ant to add to the new dataframe.
+'''
 
 
 def convert_to_int(csv_file, sorting_value, drop_col, new_col):
@@ -31,6 +45,15 @@ def convert_to_int(csv_file, sorting_value, drop_col, new_col):
     return csv_file
 
 
+'''
+Method that replaces the String ID's with the new unique numeric id's
+It maps the appropriate String ID's with numeric and replaces them.
+full_frame = the frame we want append on and drop columns.
+new_sub_frame = The data frame that holds the numeric ID's we want to append on the full frame
+mapped_column = is the column we want to replace with the numeric ID's
+'''
+
+
 def convert_full_frame(full_frame, new_sub_frame, mapped_column):
     # Merging two data frames and adding new value that corresponds to another dataframe.
     # Mapping the correct values.
@@ -42,8 +65,25 @@ def convert_full_frame(full_frame, new_sub_frame, mapped_column):
 
     return df
 
+
+
+
+
+'''
+Function that keeps only the ratings that are higher value than 0.01
+data_frame = is the frame we will filter data out.
+'''
+
+
 def keep_high_ratings(data_frame):
-    return data_frame[data_frame.rating >= 0.01]
+    return data_frame[data_frame.rating > 0.01]
+
+
+'''
+Method that groups all the unique userId-itemId to tuples and computed the sum of all their ratings.
+data_frame = Is a dataframe where we group the pairs and compute sum
+'''
+
 
 def find_rating_sum(data_frame):
     #
@@ -52,7 +92,18 @@ def find_rating_sum(data_frame):
     new_df = data_frame.groupby(['userIdAsInteger', 'itemIdAsInteger'])['rating'].sum().reset_index()
 
     keep_good_ratings = keep_high_ratings(new_df)
-    return keep_good_ratings.rename(columns={'rating':'ratingSum'})
+    return keep_good_ratings.rename(columns={'rating': 'ratingSum'})
+
+
+'''
+Method that will export the dataframe to a CSV file. The file will be exported on the code directory.
+df = dataframe we are exporting
+path = the filename we want to provide.
+'''
+
+
+def write_csv_result(df, path):
+    df.to_csv(path, header=True)
 
 
 """
@@ -80,6 +131,10 @@ if __name__ == '__main__':
     aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userId')
     agg = convert_full_frame(aggregate.copy(), itemID_sorted.copy(), 'itemId')
 
-    print(agg.info())
 
-    print(find_rating_sum(agg.copy()))
+    print(find_rating_sum(ddd.copy()))
+
+    # Writing the resultant dataframes to CSV files.
+    # write_csv_result(userID_sorted, 'lookupuser.csv')
+    # write_csv_result(itemID_sorted, 'lookup_product.csv')
+    # write_csv_result(userID_sorted, 'aggratings.csv')
