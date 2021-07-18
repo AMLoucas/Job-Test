@@ -12,7 +12,8 @@ filename = variable with the full filepath of the file.
 
 def read_csv_file(filename):
     df = pandas.read_csv(filename,
-                         names=['userId', 'itemId', 'rating', 'timestamp'])
+                         names=['userId', 'itemId', 'rating', 'timestamp'],
+                         nrows=5000)
     return df
 
 
@@ -25,17 +26,15 @@ sorting_value = the column we want to sort the dataframe.
 drop_col = the columns we do not want to include in new dataframe.
 new_col = the new column name we ant to add to the new dataframe.
 '''
-
-
 def convert_to_int(csv_file, sorting_value, drop_col, new_col):
     # Sorting by userID
     csv_file.sort_values(sorting_value, inplace=True)
     # Dropping columns not needed
     csv_file = csv_file.drop(drop_col, axis=1)
-    # Removing duplicates of users.
-    csv_file.drop_duplicates(subset=sorting_value,
-                             keep='last',  # keep at least 1 record from the duplicates!!
-                             inplace=True)
+
+    # Calling function to remove duplicates
+    csv_file = remove_duplicates(csv_file.copy(), sorting_value)
+
     # Resetting index to start from 0 and keep a correct sequence.
     csv_file.reset_index(inplace=True,
                          drop=True,
@@ -43,6 +42,18 @@ def convert_to_int(csv_file, sorting_value, drop_col, new_col):
     # Adding the new index (unique integer for each unique user) as column in dataframe
     csv_file[new_col] = csv_file.index
     return csv_file
+
+'''
+Function that removes duplicates values from column. However, it keeps one of the duplicates in the frame.
+Does not delete all of the recods.
+'''
+def remove_duplicates(df, col_name):
+    # Removing duplicates of column col_name.
+    df.drop_duplicates(subset=col_name,
+                             keep='last',  # keep at least 1 record from the duplicates!!
+                             inplace=True)
+
+    return df
 
 
 '''
