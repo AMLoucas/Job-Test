@@ -127,6 +127,8 @@ It is in charge of calling the correct process of the pipeline to accomplish the
 """
 # Conditional to start the main process.
 if __name__ == '__main__':
+    # Print statement to notify user the script is running
+    print("Script is being run ...")
     # Read the CSV file.
     # Change the file path to suit your local directory.
     full_CSV_file = read_csv_file("/Users/louca5z/Downloads/xag.csv")
