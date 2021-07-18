@@ -170,3 +170,5 @@ if __name__ == '__main__':
     write_csv_result(userID_sorted, 'lookupuser.csv')
     write_csv_result(itemID_sorted, 'lookup_product.csv')
     write_csv_result(userID_sorted, 'aggratings.csv')
+
+    print("Script has been run successfully")
