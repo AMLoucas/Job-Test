@@ -101,16 +101,13 @@ def keep_high_ratings(data_frame):
 Method that groups all the unique userId-itemId to tuples and computed the sum of all their ratings.
 data_frame = Is a dataframe where we group the pairs and compute sum
 '''
-
-
 def find_rating_sum(data_frame):
     #
     data_frame = data_frame.drop('timestamp', axis=1)
     # Finding unique paris and finding the rating sum.
     new_df = data_frame.groupby(['userIdAsInteger', 'itemIdAsInteger'])['rating'].sum().reset_index()
 
-    keep_good_ratings = keep_high_ratings(new_df)
-    return keep_good_ratings.rename(columns={'rating': 'ratingSum'})
+    return new_df.rename(columns={'rating': 'ratingSum'})
 
 
 '''
@@ -146,14 +143,18 @@ if __name__ == '__main__':
                                    ['userId', 'rating', 'timestamp'],
                                    'itemIdAsInteger')
 
-    aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userId')
-    agg = convert_full_frame(aggregate.copy(), itemID_sorted.copy(), 'itemId')
+    # Replacing the String ID's with numeric ID's.
+    aggratings = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userId')
+    aggratings = convert_full_frame(aggratings.copy(), itemID_sorted.copy(), 'itemId')
 
-    ddd = apply_decay_factor(agg.copy())
+    # Applyin the decay factor
+    aggratings = apply_decay_factor(aggratings.copy())
 
-    print(find_rating_sum(ddd.copy()))
+    # Computing sum of ratings.
+    aggratings = find_rating_sum(aggratings.copy())
 
+    # Exporting the data_frames to CSV files.
     # Writing the resultant dataframes to CSV files.
-    # write_csv_result(userID_sorted, 'lookupuser.csv')
-    # write_csv_result(itemID_sorted, 'lookup_product.csv')
-    # write_csv_result(userID_sorted, 'aggratings.csv')
+    write_csv_result(userID_sorted, 'lookupuser.csv')
+    write_csv_result(itemID_sorted, 'lookup_product.csv')
+    write_csv_result(userID_sorted, 'aggratings.csv')
