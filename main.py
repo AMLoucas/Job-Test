@@ -39,9 +39,10 @@ def convert_full_frame(full_frame, new_sub_frame, new_col, mapped_column):
     # Setting both data frames same index to map the data together
     full_frame.set_index(mapped_column, inplace=True)
 
-    # Updating the larger data frame using the index mapping.
-    full_frame.update(new_sub_frame.set_index(mapped_column))
+    # Updating the larger data frame using the index mapping
     # Replacing the -1 column with appropriate mapping.
+    full_frame.update(new_sub_frame.set_index(mapped_column))
+
     full_frame[new_col] = full_frame[new_col].astype(int)
 
     # Re-shaping to starting structure.
@@ -61,19 +62,20 @@ if __name__ == '__main__':
     full_CSV_file = read_csv_file("/Users/louca5z/Downloads/xag.csv")
 
     # Converting the user ID's to integers.
-    userID_sorted = convert_to_int(full_CSV_file,
+    userID_sorted = convert_to_int(full_CSV_file.copy(),
                                    'userId',
                                    ['itemId', 'rating', 'timestamp'],
                                    'userIdAsInteger')
 
     # Converting the item ID's to integers.
-    itemID_sorted = convert_to_int(full_CSV_file,
+    itemID_sorted = convert_to_int(full_CSV_file.copy(),
                                    'itemId',
                                    ['userId', 'rating', 'timestamp'],
                                    'itemIdAsInteger')
 
-
     print(itemID_sorted)
-    aggregate = convert_full_frame(full_CSV_file, itemID_sorted, 'itemIdAsInteger', 'itemId')
-    aggregate = convert_full_frame(full_CSV_file, userID_sorted, 'userIdAsInteger', 'userId')
+    aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userIdAsInteger', 'userId')
+    agg = convert_full_frame(full_CSV_file.copy(), itemID_sorted.copy(), 'itemIdAsInteger', 'itemId')
+    print(agg)
+
     print(aggregate)
