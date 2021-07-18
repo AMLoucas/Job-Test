@@ -42,6 +42,8 @@ def convert_full_frame(full_frame, new_sub_frame, mapped_column):
 
     return df
 
+def keep_high_ratings(data_frame):
+    return data_frame[data_frame.rating >= 0.01]
 
 def find_rating_sum(data_frame):
     #
@@ -49,7 +51,8 @@ def find_rating_sum(data_frame):
     # Finding unique paris and finding the rating sum.
     new_df = data_frame.groupby(['userIdAsInteger', 'itemIdAsInteger'])['rating'].sum().reset_index()
 
-    return new_df.rename(columns={'rating':'ratingSum'})
+    keep_good_ratings = keep_high_ratings(new_df)
+    return keep_good_ratings.rename(columns={'rating':'ratingSum'})
 
 
 """
@@ -79,4 +82,4 @@ if __name__ == '__main__':
 
     print(agg.info())
 
-    print(find_rating_sum(agg))
+    print(find_rating_sum(agg.copy()))
