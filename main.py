@@ -12,13 +12,13 @@ def read_csv_file(filename):
     return df
 
 
-def convert_user_to_int(csv_file):
+def convert_user_to_int(csv_file, sorted, drop_col, new_col):
     # Sorting by userID
-    csv_file.sort_values("userId", inplace=True)
+    csv_file.sort_values(sorted, inplace=True)
     # Dropping columns not needed
-    csv_file = csv_file.drop(['itemId', 'rating', 'timestamp'], axis=1)
+    csv_file = csv_file.drop(drop_col, axis=1)
     # Removing duplicates of users.
-    csv_file.drop_duplicates(subset="userId",
+    csv_file.drop_duplicates(subset=sorted,
                                   keep=False,
                                   inplace=True)
     # Resetting index to start from 0 and keep a correct sequence.
@@ -26,7 +26,7 @@ def convert_user_to_int(csv_file):
                          drop=True,
                          level=0)
     # Adding the new index (unique integer for each unique user) as column in datafram
-    csv_file['userIdAsInteger'] = csv_file.index
+    csv_file[new_col] = csv_file.index
     return csv_file
 
 
@@ -42,5 +42,8 @@ if __name__ == '__main__':
     # print(full_CSV_file)
 
     # Converting the item and user ID's to integers.
-    userID_sorted = convert_user_to_int(full_CSV_file)
+    userID_sorted = convert_user_to_int(full_CSV_file,
+                                        'userId',
+                                        ['itemId', 'rating', 'timestamp'],
+                                        'userIdAsInteger')
     print(userID_sorted)
