@@ -49,7 +49,7 @@ def find_rating_sum(data_frame):
     # Finding unique paris and finding the rating sum.
     new_df = data_frame.groupby(['userIdAsInteger', 'itemIdAsInteger'])['rating'].sum().reset_index()
 
-    return new_df
+    return new_df.rename(columns={'rating':'ratingSum'})
 
 
 """
