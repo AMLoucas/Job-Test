@@ -12,8 +12,7 @@ filename = variable with the full filepath of the file.
 
 def read_csv_file(filename):
     df = pandas.read_csv(filename,
-                         names=['userId', 'itemId', 'rating', 'timestamp'],
-                         nrows=5000)
+                         names=['userId', 'itemId', 'rating', 'timestamp'])
     return df
 
 
@@ -82,7 +81,7 @@ This is a function that applies a multiplicative decay factor on the ratings dep
 [NOTE] Honestly i did not understand what is being asked here precisely, so i researched how decay factors work
 and assumed the following is correct. My understanding is based on this youtube video : https://www.youtube.com/watch?v=Q4WaHGgJMy0
 
-which translated to => rating * (0.95) ^ [row(timestamp) / max(timestamp)] , This is what i applied.
+which translated to => rating * (0.95) ^ [max(timestamp) / row(timestamp)] , This is what i applied.
 
 df = Is the dataframe we will aplpy the computations and modifications on.
 '''
@@ -93,7 +92,7 @@ def apply_decay_factor(df):
     decay_factor = 0.95
     maximum_timestamp = max(df['timestamp'])
 
-    df['rating'] = df['rating'] * (decay_factor ** (df['timestamp'] / maximum_timestamp))
+    df['rating'] = df['rating'] * (decay_factor ** (maximum_timestamp / df['timestamp']))
 
     return keep_high_ratings(df)
 
