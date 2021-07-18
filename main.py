@@ -66,7 +66,25 @@ def convert_full_frame(full_frame, new_sub_frame, mapped_column):
     return df
 
 
+'''
+This is a function that applies a multiplicative decay factor on the ratings depending on timestamp.
+[NOTE] Honestly i did not understand what is being asked here precisely, so i researched how decay factors work
+and assumed the following is correct. My understanding is based on this youtube video : https://www.youtube.com/watch?v=Q4WaHGgJMy0
 
+which translated to => rating * (0.95) ^ [row(timestamp) / max(timestamp)] , This is what i applied.
+
+df = Is the dataframe we will aplpy the computations and modifications on.
+'''
+
+
+def apply_decay_factor(df):
+    # Constants that will be used in the process.
+    decay_factor = 0.95
+    maximum_timestamp = max(df['timestamp'])
+
+    df['rating'] = df['rating'] * (decay_factor ** (df['timestamp'] / maximum_timestamp))
+
+    return keep_high_ratings(df)
 
 
 '''
@@ -131,6 +149,7 @@ if __name__ == '__main__':
     aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userId')
     agg = convert_full_frame(aggregate.copy(), itemID_sorted.copy(), 'itemId')
 
+    ddd = apply_decay_factor(agg.copy())
 
     print(find_rating_sum(ddd.copy()))
 
