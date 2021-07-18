@@ -20,7 +20,7 @@ def convert_to_int(csv_file, sorting_value, drop_col, new_col):
     csv_file = csv_file.drop(drop_col, axis=1)
     # Removing duplicates of users.
     csv_file.drop_duplicates(subset=sorting_value,
-                             keep=False,
+                             keep='last',  # keep at least 1 record from the duplicates!!
                              inplace=True)
     # Resetting index to start from 0 and keep a correct sequence.
     csv_file.reset_index(inplace=True,
@@ -31,24 +31,19 @@ def convert_to_int(csv_file, sorting_value, drop_col, new_col):
     return csv_file
 
 
-def convert_full_frame(full_frame, new_sub_frame, new_col, mapped_column):
-    # Creating a new column, with constant to be initialized (should be negative so no confusion with id's happen)
-    # ID's start from 0 so no negative ID's
-    full_frame[new_col] = -1
+def convert_full_frame(full_frame, new_sub_frame, mapped_column):
+    # Merging two data frames and adding new value that corresponds to another dataframe.
+    # Mapping the correct values.
+    df = full_frame.merge(new_sub_frame, on=[mapped_column], how='left')
 
-    # Setting both data frames same index to map the data together
-    full_frame.set_index(mapped_column, inplace=True)
+    # Removing old column that is not needed anymore.
+    # String identifier column being removed.
+    df = df.drop(mapped_column, axis=1)
 
-    # Updating the larger data frame using the index mapping
-    # Replacing the -1 column with appropriate mapping.
-    full_frame.update(new_sub_frame.set_index(mapped_column))
+    return df
 
-    full_frame[new_col] = full_frame[new_col].astype(int)
 
-    # Re-shaping to starting structure.
-    full_frame.reset_index(inplace=True, level=0, drop=False)
 
-    return full_frame
 
 
 """
@@ -73,9 +68,9 @@ if __name__ == '__main__':
                                    ['userId', 'rating', 'timestamp'],
                                    'itemIdAsInteger')
 
-    print(itemID_sorted)
-    aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userIdAsInteger', 'userId')
-    agg = convert_full_frame(full_CSV_file.copy(), itemID_sorted.copy(), 'itemIdAsInteger', 'itemId')
-    print(agg)
+    aggregate = convert_full_frame(full_CSV_file.copy(), userID_sorted.copy(), 'userId')
+    agg = convert_full_frame(aggregate.copy(), itemID_sorted.copy(), 'itemId')
 
-    print(aggregate)
+    print(agg.info())
+
+
