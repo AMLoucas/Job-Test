@@ -1,16 +1,25 @@
-# This is a sample Python script.
+"""
+Make sure all the packages are installed before trying to run the script.
+Importing libraries and packages that will be used in the program.
+"""
+import csv
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+import pandas
 
 
-# Press the green button in the gutter to run the script.
+# Method that reads a csv file and returns it to the main.
+def read_csv_file(filename):
+    df = pandas.read_csv(filename,
+                         names=['userId', 'itemId', 'rating', 'timestamp'])
+    return df
+
+
+"""
+This is the main method.
+It is in charge of calling the correct process of the pipeline to accomplish the tasks in hand.
+"""
+# Conditional to start the main process.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Change the file path to suit your local directory.
+    full_CSV_file = read_csv_file("/Users/louca5z/Downloads/xag.csv")
+    print(full_CSV_file)
