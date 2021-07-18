@@ -41,9 +41,15 @@ if __name__ == '__main__':
     full_CSV_file = read_csv_file("/Users/louca5z/Downloads/xag.csv")
     # print(full_CSV_file)
 
-    # Converting the item and user ID's to integers.
+    # Converting the user ID's to integers.
     userID_sorted = convert_user_to_int(full_CSV_file,
                                         'userId',
                                         ['itemId', 'rating', 'timestamp'],
                                         'userIdAsInteger')
-    print(userID_sorted)
+
+    # Converting the item ID's to integers.
+    itemID_sorted = convert_user_to_int(full_CSV_file,
+                                        'itemId',
+                                        ['userId', 'rating', 'timestamp'],
+                                        'itemIdAsInteger')
+    print(itemID_sorted)
