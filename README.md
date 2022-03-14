@@ -2,13 +2,14 @@
 ## There is only one python file to run to accomplish all tasks set : main.py
 
 Before running you need to make sure of :
-    -   You have downloaded the CSV data file on your local machine.
-    -   Change paths to suit your local machine
-        *   line 132 , modify the full path name to suit your localmachine (depends on where you saved the file.)
-    -   Make sure to have installed all the appropriate software:
-        *   python 3.XX
-        *   library pandas, can be installed using "pip install pandas"
-        *   Make sure the library is installed in correct directory (version of python being used.) to run the script.
+
+ - You have downloaded the CSV data file on your local machine.
+ - Change paths to suit your local machine
+  * line 132 , modify the full path name to suit your localmachine (depends on where you saved the file.)
+ - Make sure to have installed all the appropriate software:
+  * python 3.XX
+  * library pandas, can be installed using "pip install pandas"
+  * Make sure the library is installed in correct directory (version of python being used.) to run the script.
 
 Once these 3 instunctions are satisfied the script can be run.
 Steps to run the script.
