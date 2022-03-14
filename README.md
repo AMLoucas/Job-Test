@@ -5,7 +5,7 @@ Before running you need to make sure of :
 
  - You have downloaded the CSV data file on your local machine.
  - Change paths to suit your local machine
- -   * line 132 , modify the full path name to suit your localmachine (depends on where you saved the file.)
+   * line 132 , modify the full path name to suit your localmachine (depends on where you saved the file.)
  - Make sure to have installed all the appropriate software:
   * python 3.XX
   * library pandas, can be installed using "pip install pandas"
